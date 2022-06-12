@@ -1,0 +1,36 @@
+{
+	"name": "PA01",
+	"properties": {
+		"description": "Pipeline de Aprenzado 01:\nCópia e transformação de dados.",
+		"activities": [
+			{
+				"name": "DFMesAno",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "00:01:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "TransformandoCSV",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Peixoto"
+		},
+		"annotations": []
+	}
+}

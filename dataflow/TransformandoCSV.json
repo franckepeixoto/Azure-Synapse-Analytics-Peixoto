@@ -1,0 +1,96 @@
+{
+	"name": "TransformandoCSV",
+	"properties": {
+		"folder": {
+			"name": "Peixoto"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ADL_CSV_FIIS_YIELD",
+						"type": "DatasetReference"
+					},
+					"name": "Dividendos"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ADL_CSV_AnoMes",
+						"type": "DatasetReference"
+					},
+					"name": "MesAno"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectMesAno"
+				},
+				{
+					"name": "DerivedMesAno"
+				},
+				{
+					"name": "OrdenarMesAno"
+				},
+				{
+					"name": "RemoverDuplicatas"
+				},
+				{
+					"name": "RemoverDadosEmBranco"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Month/Year} as string,",
+				"          {Stock Code} as string,",
+				"          Dividend as string,",
+				"          {Asset Value} as string,",
+				"          Name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Dividendos",
+				"Dividendos select(mapColumn(",
+				"          MesAno = {Month/Year}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectMesAno",
+				"SelectMesAno derive(mes = trim(split(upper(trim(MesAno)),'/')[1]),",
+				"          ano = toInteger(split(upper(trim(MesAno)),'/')[2])) ~> DerivedMesAno",
+				"RemoverDadosEmBranco sort(asc(ano, true),",
+				"     asc(iif(equals(mes,'JANEIRO'), 1, \r",
+				"    iif(mes==\"FEVEREIRO\", 2,\r",
+				"        iif(mes=='MARÇO', 3,\r",
+				"            iif(mes=='ABRIL', 4,\r",
+				"                iif(mes=='MAIO', 5,\r",
+				"                    iif(mes=='JUNHO', 6,\r",
+				"                        iif(mes=='JULHO', 7,\r",
+				"                            iif(mes=='AGOSTO',8,\r",
+				"                                iif(mes=='SETEMBRO', 9,iif(mes=='OUTUBRO', 10,iif(mes=='NOVEMBRO', 11,12))))\r",
+				"                            )\r",
+				"                        )\r",
+				"                    )\r",
+				"            )\r",
+				"        )\r",
+				"    )\r",
+				"), true),",
+				"     partitionLevel: true) ~> OrdenarMesAno",
+				"DerivedMesAno aggregate(groupBy(mes),",
+				"     ano = first(ano)) ~> RemoverDuplicatas",
+				"RemoverDuplicatas filter(notEquals(mes, \"\") \r",
+				" \r",
+				") ~> RemoverDadosEmBranco",
+				"OrdenarMesAno sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> MesAno"
+			]
+		}
+	}
+}

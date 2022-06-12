@@ -1,0 +1,31 @@
+{
+	"name": "DSP_dboDimMesAno",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "mes",
+				"type": "varchar"
+			},
+			{
+				"name": "ano",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "DimMesAno"
+		},
+		"sqlPool": {
+			"referenceName": "PeixotoEnterpriseDataWharehouse",
+			"type": "SqlPoolReference"
+		}
+	}
+}

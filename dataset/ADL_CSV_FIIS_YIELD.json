@@ -1,0 +1,45 @@
+{
+	"name": "ADL_CSV_FIIS_YIELD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "peixoto-synapse-analytics-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "fiis_yield_historical.csv",
+				"folderPath": "fundosImobiliados",
+				"fileSystem": "peixoto"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Month/Year",
+				"type": "String"
+			},
+			{
+				"name": "Stock Code",
+				"type": "String"
+			},
+			{
+				"name": "Dividend",
+				"type": "String"
+			},
+			{
+				"name": "Asset Value",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			}
+		]
+	}
+}

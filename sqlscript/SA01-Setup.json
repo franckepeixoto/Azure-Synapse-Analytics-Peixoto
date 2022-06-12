@@ -1,0 +1,20 @@
+{
+	"name": "SA01-Setup",
+	"properties": {
+		"folder": {
+			"name": "Kaggle House Prices"
+		},
+		"content": {
+			"query": "/*\nCriação de schemas \nhttps://docs.microsoft.com/pt-br/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-develop-user-defined-schemas\n\n*/ \nIF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'csv')\nBEGIN\n    EXEC ('CREATE SCHEMA csv;');\nEND;\n\nDROP VIEW IF EXISTS csv.HousingPrices\nGO\n\nCREATE VIEW csv.HousingPrices AS\nSELECT Id,Street,SaleType,CentralAir,MSZoning,YrSold,YearBuilt,(SalePrice/LotArea * MSSubClass) AS SalePrice\nFROM\n    OPENROWSET( \n        BULK 'https://peixotodatalake.dfs.core.windows.net/peixoto/housingPrices/*.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0',\n        HEADER_ROW= TRUE\n    \n    )    \n    WITH (\n    [Id]            INT\n    ,[Street]       VARCHAR (10)    COLLATE Latin1_General_100_BIN2_UTF8\n    ,[MSZoning]     VARCHAR (10)    COLLATE Latin1_General_100_BIN2_UTF8\n    ,[SaleType]     VARCHAR(10)     COLLATE Latin1_General_100_BIN2_UTF8\n    ,[CentralAir]   VARCHAR(10)     COLLATE Latin1_General_100_BIN2_UTF8\n    ,[MSSubClass]   INT\n    ,[LotArea]      INT\n    ,[YearBuilt]    INT \n    ,[YrSold]       INT\n\n    ,[SalePrice]    FLOAT\n    ) AS [r];\nGO\n\n\nSELECT COUNT(1) FROM csv.HousingPrices \nGO\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SynapseDatabase",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

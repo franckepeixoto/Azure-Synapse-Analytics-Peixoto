@@ -1,0 +1,16 @@
+{
+	"name": "AzureOpenDataSet",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"sasUri": "https://nyctlc@azureopendatastorage.blob.core.windows.net",
+			"encryptedCredential": "${PEIXOTO_BLOCKED:qaZXSWrrf@3QW}"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

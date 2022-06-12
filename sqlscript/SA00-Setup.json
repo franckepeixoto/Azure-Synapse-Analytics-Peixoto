@@ -1,0 +1,21 @@
+{
+	"name": "SA00-Setup",
+	"properties": {
+		"description": "Script de Aprendizado (SA) 00: Setup\nCarregar dados yusando a instrução COPY\nby Francke Peixoto",
+		"folder": {
+			"name": "Peixoto"
+		},
+		"content": {
+			"query": "/*\nScript de Aprendizado (SA) 00: Setup - Carregar dados usando a instrução COPY\nby Francke Peixoto\n\nCOPY: Instrução usada para carregar os dados em massa em um Pool SQL Synapse Dedicated.\nOBS : Será necessário verificar se  as permissões estejam configuradas de forma correta.\n\nhttps://docs.microsoft.com/pt-br/azure/synapse-analytics/sql-data-warehouse/design-guidance-for-replicated-tables\nhttps://docs.microsoft.com/pt-br/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-tables-distribute\n\n*/ \n\nIF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'SynapseDatabase')\n\t CREATE DATABASE  SynapseDatabase\nGO\nUSE SynapseDatabase\nGO\n\n\n\nCREATE EXTERNAL FILE FORMAT CSVFormat\nWITH (  \n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS (\n        FIELD_TERMINATOR = ',',\n        STRING_DELIMITER = '\"',\n        FIRST_ROW = 2\n    )\n);\nGO\n\n-- Create publicly available external data sources\nCREATE EXTERNAL DATA SOURCE PeixotoDataLake\nWITH ( LOCATION = 'https://peixotodatalake.blob.core.windows.net')\nGO\n\n\nDROP EXTERNAL TABLE csv.Dividendos\n\n\nCREATE VIEW  csv.Dividendos\nAS\nSELECT  \n  [Stock Code]                                                                      AS  ticker\n ,CONVERT(DECIMAL(18,5),REPLACE(REPLACE([Dividend],',','.'),'#N/A','0'))            AS  valorPago\n ,CONVERT(DECIMAL(18,5),REPLACE(REPLACE([Asset Value],',','.'),'#N/A','0'))         AS  valorPatrimonial\n ,UPPER(TRIM(SUBSTRING([Month/Year],0,CHARINDEX( '/',[Month/Year]))))               AS  mes \n ,CONVERT(INT,(TRIM(SUBSTRING([Month/Year],CHARINDEX( '/',[Month/Year])+1,4))))     AS  ano\nFROM OPENROWSET(\n        BULK 'peixoto/fundosImobiliados/fiis_yield_historical.csv',\n        DATA_SOURCE = 'PeixotoDataLake',\n        FORMAT = 'CSV', \n        FIRSTROW = 2\n    )\n    WITH (\n             [Month/Year]   VARCHAR (30) COLLATE Latin1_General_BIN2\n            ,[Stock Code]   VARCHAR (10) COLLATE Latin1_General_BIN2\n            ,[Dividend]     VARCHAR (10) COLLATE Latin1_General_BIN2\n            ,[Asset Value]  VARCHAR (10) COLLATE Latin1_General_BIN2    \n            ,[Name]         VARCHAR (50) COLLATE Latin1_General_BIN2\n    ) AS fii\n    \nGO\n\nSELECT      ano,SUM(valorPago) as totalPago\nFROM        csv.Dividendos \nGROUP BY    ano\nORDER BY    ano DESC\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SynapseDatabase",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

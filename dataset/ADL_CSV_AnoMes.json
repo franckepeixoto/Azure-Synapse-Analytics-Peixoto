@@ -1,0 +1,23 @@
+{
+	"name": "ADL_CSV_AnoMes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "peixoto-synapse-analytics-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "fundosImobiliados/yield_mes_ano",
+				"fileSystem": "peixoto"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
