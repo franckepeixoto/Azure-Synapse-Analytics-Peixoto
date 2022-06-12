@@ -1,5 +1,7 @@
-## Azure Synapse Analytics
-https://play.google.com/books/reader?id=yfQ8LgAAAEAJ&pg=GBS.PA98.w.0.0.0.2_89
+# Azure Synapse Analytics - Francke Peixoto 
+Diário de bordo para quem quer entender os principais aspectos do **Azure Synapse Analytics**
+
+![](https://4.bp.blogspot.com/-94Ztma98Myk/XqSCbZgL9lI/AAAAAAAAGcM/cnPtvLH5bWsfVT26R0HXgtUuy9VK57S4ACLcBGAsYHQ/s200/AzureSynapseAnalytics.png)
 
 O Azure Synapse Analytics é um serviço de análise ilimitado que reúne integração de dados, armazenamento de dados corporativos e análise de big data.
 Ele oferece a liberdade de consultgar dados em seus termoms, usando recursos dedicados ou sem sevidor de modo escalar. 
@@ -150,5 +152,11 @@ Portanto, haverá combrança por terabyte de dados procesasdos para a execução
 #### Segurança
 Dedicated Pool possui segurança em nível de linha (RLS), criptografia de dados transparente (TDE), descoberta e classificação de dados,
 avaliação  de vunerabilidade, proteção avançada contra ameaças (ATP) e auditoria são alguns dos recursos importantes que só estão disponiveis no Dedicated Pool.
+
+
+_Referencias_:
+* [Beginning Azure Synapse Analytics: Transition from Data Warehouse to Data Lakehouse 1st ed. Edition
+](https://www.amazon.com/Beginning-Azure-Synapse-Analytics-Transition/dp/1484270606)
+* [Azure Synapse Analytics](https://docs.microsoft.com/pt-br/azure/synapse-analytics/)
 
 
